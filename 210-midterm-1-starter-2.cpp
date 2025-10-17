@@ -66,3 +66,43 @@ class DoublyLinkedList {
             // Insert newNode after temp
             newNode->next = temp->next;  // Make newNode's next point to what temp was pointing to
             newNode->prev = temp;        // Make newNode's prev point back to temp
+            
+            // Update the node after newNode (if it exists) to point back to newNode
+            if (temp->next)
+                temp->next->prev = newNode;  // Update the next node's prev pointer to newNode
+            else
+                tail = newNode;  // If temp was the tail, update tail to point to newNode
+            
+            temp->next = newNode;  // Finally, make temp's next point to newNode, completing the insertion
+        }
+    
+        // delete_val - deletes the first node that contains the specified value
+        void delete_val(int value) {
+            // Check if list is empty - nothing to delete
+            if (!head) return;  // Exit if head is nullptr (empty list)
+    
+            // Start traversing from the head to find the node with the target value
+            Node* temp = head;  // temp pointer starts at the first node
+            
+            // Traverse the list while temp is not nullptr AND data doesn't match value
+            while (temp && temp->data != value)
+                temp = temp->next;  // Move temp to the next node
+    
+            // If we reached the end without finding the value, exit
+            if (!temp) return;  // temp is nullptr means value not found in list
+    
+            // Update the previous node's next pointer to skip over temp
+            if (temp->prev)
+                temp->prev->next = temp->next;  // Make previous node point to node after temp
+            else
+                head = temp->next;  // If temp is the head, update head to the next node
+    
+            // Update the next node's prev pointer to skip over temp
+            if (temp->next)
+                temp->next->prev = temp->prev;  // Make next node point back to node before temp
+            else
+                tail = temp->prev;  // If temp is the tail, update tail to the previous node
+    
+            delete temp;  // Free the memory occupied by the node we're deleting
+        }
+    
