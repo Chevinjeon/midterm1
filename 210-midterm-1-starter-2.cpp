@@ -106,3 +106,193 @@ class DoublyLinkedList {
             delete temp;  // Free the memory occupied by the node we're deleting
         }
     
+        // delete_pos - deletes the node at the specified position (1-indexed)
+        void delete_pos(int pos) {
+            // Check if list is empty
+            if (!head) {
+                cout << "List is empty." << endl;  // Error message for empty list
+                return;  // Exit without deleting
+            }
+        
+            // Special case: deleting the first node (position 1)
+            if (pos == 1) {
+                pop_front();  // Call pop_front() to handle deletion of head node
+                return;  // Exit after deletion
+            }
+        
+            // Traverse to find the node at position pos
+            Node* temp = head;  // Start temp at the head (position 1)
+        
+            // Loop to move temp to the node at position pos
+            for (int i = 1; i < pos; i++){
+                // Check if we've reached the end prematurely
+                if (!temp) {
+                    cout << "Position doesn't exist." << endl;  // Error: position beyond list
+                    return;  // Exit without deleting
+                }
+                else
+                    temp = temp->next;  // Move temp to the next node
+            }
+            
+            // Double-check that temp is valid (position exists)
+            if (!temp) {
+                cout << "Position doesn't exist." << endl;  // Error: position doesn't exist
+                return;  // Exit without deleting
+            }
+        
+            // Special case: if temp is the last node (tail)
+            if (!temp->next) {
+                pop_back();  // Call pop_back() to handle deletion of tail node
+                return;  // Exit after deletion
+            }
+        
+            // Delete temp (middle node case)
+            Node* tempPrev = temp->prev;        // Store pointer to the previous node
+            tempPrev->next = temp->next;        // Make previous node skip over temp, point to next node
+            temp->next->prev = tempPrev;        // Make next node point back to previous node
+            delete temp;                        // Free the memory of the deleted node
+        }
+    
+        // push_back - adds a new node with value v at the end of the list
+        void push_back(int v) {
+            Node* newNode = new Node(v);  // Allocate memory for new node and initialize with value v
+            
+            // Check if list is empty (tail is nullptr)
+            if (!tail)
+                head = tail = newNode;  // Make both head and tail point to newNode (first element)
+            else {
+                tail->next = newNode;   // Make current tail's next pointer point to newNode
+                newNode->prev = tail;   // Make newNode's prev pointer point back to current tail
+                tail = newNode;         // Update tail to point to newNode (new last element)
+            }
+        }
+        
+        // push_front - adds a new node with value v at the beginning of the list
+        void push_front(int v) {
+            Node* newNode = new Node(v);  // Allocate memory for new node and initialize with value v
+            
+            // Check if list is empty (head is nullptr)
+            if (!head)
+                head = tail = newNode;  // Make both head and tail point to newNode (first element)
+            else {
+                newNode->next = head;   // Make newNode's next pointer point to current head
+                head->prev = newNode;   // Make current head's prev pointer point back to newNode
+                head = newNode;         // Update head to point to newNode (new first element)
+            }
+        }
+        
+        // pop_front - removes the first node from the list
+        void pop_front() {
+            // Check if list is empty
+            if (!head) {
+                cout << "List is empty." << endl;  // Error message for empty list
+                return;  // Exit without deleting
+            }
+    
+            Node * temp = head;  // Store pointer to current head (node to be deleted)
+    
+            // Check if there's more than one node in the list
+            if (head->next) {
+                head = head->next;      // Move head pointer to the second node
+                head->prev = nullptr;   // Set new head's prev to nullptr (it's now the first node)
+            }
+            else
+                head = tail = nullptr;  // List had only one node, so make both head and tail nullptr
+            
+            delete temp;  // Free the memory of the old head node
+        }
+    
+        // pop_back - removes the last node from the list
+        void pop_back() {
+            // Check if list is empty
+            if (!tail) {
+                cout << "List is empty." << endl;  // Error message for empty list
+                return;  // Exit without deleting
+            }
+            
+            Node * temp = tail;  // Store pointer to current tail (node to be deleted)
+    
+            // Check if there's more than one node in the list
+            if (tail->prev) {
+                tail = tail->prev;      // Move tail pointer to the second-to-last node
+                tail->next = nullptr;   // Set new tail's next to nullptr (it's now the last node)
+            }
+            else
+                head = tail = nullptr;  // List had only one node, so make both head and tail nullptr
+            
+            delete temp;  // Free the memory of the old tail node
+        }
+    
+        // Destructor - cleans up all allocated memory when the list object is destroyed
+        ~DoublyLinkedList() {
+            // Loop through all nodes starting from head
+            while (head) {
+                Node* temp = head;      // Store current head in temp
+                head = head->next;      // Move head to the next node
+                delete temp;            // Free the memory of the previous head
+            }
+            // When loop ends, all nodes have been deleted and head is nullptr
+        }
+        
+        // print - outputs all elements in the list from head to tail
+        void print() {
+            Node* current = head;  // Start current pointer at the head
+            
+            // Check if list is empty
+            if (!current) {
+                cout << "List is empty." << endl;  // Message for empty list
+                return;  // Exit function
+            }
+            
+            // Traverse the list from head to tail
+            while (current) {
+                cout << current->data << " ";  // Output the data in the current node
+                current = current->next;       // Move current to the next node
+            }
+            cout << endl;  // Print newline after all elements
+        }
+    
+        // print_reverse - outputs all elements in the list from tail to head
+        void print_reverse() {
+            Node* current = tail;  // Start current pointer at the tail
+            
+            // Check if list is empty
+            if (!current) { 
+                cout << "List is empty." << endl;  // Message for empty list
+                return;  // Exit function
+            }
+            
+            // Traverse the list from tail to head using prev pointers
+            while (current) {
+                cout << current->data << " ";  // Output the data in the current node
+                current = current->prev;       // Move current to the previous node
+            }
+            cout << endl;  // Print newline after all elements
+        }
+        
+        // every_other_element - outputs elements at positions 0, 2, 4, 6, etc. (skipping odd positions)
+        void every_other_element() {
+            Node* current = head;  // Start current pointer at the head (position 0)
+            
+            // Check if list is empty
+            if (!current) {
+                cout << "List is empty." << endl;  // Message for empty list
+                return;  // Exit function
+            }
+            
+            cout << "Every other element: ";  // Descriptive message
+            
+            // Traverse the list, outputting every other element
+            while (current) {
+                cout << current->data << " ";  // Output the data in the current node
+                
+                // Skip the next node by moving current two positions forward
+                if (current->next)
+                    current = current->next->next;  // Move to the node after next (skip one)
+                else
+                    current = nullptr;  // If there's no next->next, we're done
+            }
+            cout << endl;  // Print newline after all elements
+        }
+    };
+    
