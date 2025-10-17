@@ -296,3 +296,86 @@ class DoublyLinkedList {
         }
     };
     
+    // main - demonstrates the DoublyLinkedList class and the every_other_element() method
+    int main() {
+        // Suppress compiler warning by using the constants
+        cout << MIN_NR + MIN_LS + MAX_NR + MAX_LS;  // dummy statement to avoid compiler warning
+        cout << endl << endl;  // Print newlines for better formatting
+        
+        // Create a DoublyLinkedList object on the stack (calls default constructor)
+        DoublyLinkedList list;
+        
+        // Demonstrate push_back by adding elements to the end of the list
+        cout << "Building list with push_back()..." << endl;
+        list.push_back(10);   // Add 10 to empty list (head and tail both point to this node)
+        list.push_back(20);   // Add 20 after 10 (tail now points to this node)
+        list.push_back(30);   // Add 30 after 20
+        list.push_back(40);   // Add 40 after 30
+        list.push_back(50);   // Add 50 after 40
+        list.push_back(60);   // Add 60 after 50
+        list.push_back(70);   // Add 70 after 60
+        list.push_back(80);   // Add 80 after 70 (tail now points to this node)
+        
+        // Print the complete list from head to tail
+        cout << "Complete list: ";
+        list.print();  // Should output: 10 20 30 40 50 60 70 80
+        
+        // Demonstrate every_other_element() method
+        // Should output elements at positions 0, 2, 4, 6 which are: 10, 30, 50, 70
+        list.every_other_element();  
+        
+        cout << endl;
+        
+        // Test with a different list to show versatility
+        cout << "Creating a new list with different values..." << endl;
+        DoublyLinkedList list2;  // Create second list object
+        
+        // Build a list with 9 elements
+        list2.push_back(5);    // Position 0
+        list2.push_back(15);   // Position 1
+        list2.push_back(25);   // Position 2
+        list2.push_back(35);   // Position 3
+        list2.push_back(45);   // Position 4
+        list2.push_back(55);   // Position 5
+        list2.push_back(65);   // Position 6
+        list2.push_back(75);   // Position 7
+        list2.push_back(85);   // Position 8
+        
+        // Print the complete list
+        cout << "Complete list: ";
+        list2.print();  // Should output: 5 15 25 35 45 55 65 75 85
+        
+        // Demonstrate every_other_element() - should output: 5, 25, 45, 65, 85
+        list2.every_other_element();
+        
+        cout << endl;
+        
+        // Test edge case: list with only one element
+        cout << "Testing with a single-element list..." << endl;
+        DoublyLinkedList list3;  // Create third list object
+        list3.push_back(100);    // Only one element
+        
+        cout << "Complete list: ";
+        list3.print();  // Should output: 100
+        
+        // Should output just the one element
+        list3.every_other_element();  // Should output: 100
+        
+        cout << endl;
+        
+        // Test edge case: list with two elements
+        cout << "Testing with a two-element list..." << endl;
+        DoublyLinkedList list4;  // Create fourth list object
+        list4.push_back(200);    // Position 0
+        list4.push_back(300);    // Position 1
+        
+        cout << "Complete list: ";
+        list4.print();  // Should output: 200 300
+        
+        // Should output only the first element
+        list4.every_other_element();  // Should output: 200
+        
+        // When main() ends, destructors are called automatically for list, list2, list3, list4
+        // Each destructor frees all allocated nodes, preventing memory leaks
+        return 0;  // Return 0 to indicate successful program execution
+    }
